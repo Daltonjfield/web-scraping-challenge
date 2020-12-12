@@ -15,7 +15,7 @@ import pandas as pd
 
 # Setup splinter
 executable_path = {'executable_path': ChromeDriverManager().install()}
-browser = Browser('chrome', **executable_path, headless=False)
+browser = Browser('chrome', **executable_path)
 
 
 # In[6]:
@@ -31,7 +31,7 @@ def scrape():
 
     html = browser.html
     soup = bs(html, "html.parser")
-    print(soup.prettify)
+    #print(soup.prettify)
 
 
     # In[11]:
@@ -39,14 +39,14 @@ def scrape():
 
     element = soup.select_one("ul.item_list li.slide")
     title = element.find("div", class_="content_title").get_text()
-    print(title)
+    #print(title)
 
 
     # In[12]:
 
 
     paragraph = element.find("div", class_="article_teaser_body").get_text()
-    print(paragraph)
+    #print(paragraph)
 
 
     # In[25]:
@@ -59,13 +59,15 @@ def scrape():
     # In[26]:
 
 
-    click_one = browser.find_by_id("full_image").click()
+    click_one = browser.find_by_id("full_image")
+    click_one.click()
 
 
     # In[27]:
 
 
-    click_two = browser.find_link_by_partial_text("more info").click()
+    click_two = browser.find_link_by_partial_text("more info")
+    click_two.click()
 
 
     # In[28]:
@@ -73,7 +75,7 @@ def scrape():
 
     html_2 = browser.html
     soup_2 = bs(html_2, "html.parser")
-    print(soup_2.prettify)
+    #print(soup_2.prettify)
 
 
     # In[29]:
@@ -87,14 +89,14 @@ def scrape():
 
     image = soup_2.find_all("figure", class_="lede")
     results = image[0].a["href"]
-    print(results)
+    #print(results)
 
 
     # In[32]:
 
 
     featured_image_url = "https://www.jpl.nasa.gov"+ results
-    print(featured_image_url)
+    #print(featured_image_url)
 
 
     # In[35]:
@@ -102,7 +104,7 @@ def scrape():
 
     url_3 = "https://space-facts.com/mars/"
     html_file = pd.read_html(url_3)
-    print(html_file)
+    #print(html_file)
 
 
     # In[38]:
@@ -141,7 +143,7 @@ def scrape():
 
     html_4 = browser.html
     soup_4 = bs(html_4, "html.parser")
-    print(soup_4.prettify)
+    #print(soup_4.prettify)
 
 
     # In[50]:
@@ -166,11 +168,11 @@ def scrape():
         img_fin = soup_4.find("div", class_= "downloads").find("ul").find("li").find("a")["href"]
         item_list.append({"Title":title, "Final_image": img_fin})
 
-    print(item_list)
+    #print(item_list)
 
 
     # In[ ]:
-    nasa_scrape = {"title":title, "paragraph":paragraph, "df_html":df_html, "item_list":item_list} 
+    nasa_scrape = {"title":title, "paragraph":paragraph, "df_html":df_html, "item_list":item_list, "image":featured_image_url} 
     return nasa_scrape
     
 
